@@ -61,13 +61,14 @@ element peek(stacktype *s)
 	else return s->data[s->top];
 }
 
-element here = {1,0}, entry = {1,0};
+element entry = {1,0};	// 입구 위치  
+element here;			// 현재 위치  
 
 char maze[maze_size][maze_size] = 
 {
 	{'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-	{'O', ' ', ' ', ' ', 'O', 'O', 'O'},
-	{'e', ' ', 'O', ' ', ' ', 'O', 'O'},
+	{'e', ' ', ' ', ' ', 'O', 'O', 'O'},
+	{'O', 'O', 'O', ' ', ' ', 'O', 'O'},
 	{'O', ' ', ' ', ' ', 'O', 'O', 'O'},
 	{'O', ' ', 'O', ' ', 'O', 'O', 'O'},
 	{'O', ' ', 'O', ' ', ' ', ' ', 'G'},
@@ -109,18 +110,16 @@ int main (void)
 	here = entry;
 	while (maze[here.r][here.c] != 'G')
 	{
-		r = here.r;
-		c = here.c;
-		maze[r][c] = 'x';
+		maze[here.r][here.c] = 'x';
 		maze_print(maze);
-		push_loc (&s, r-1, c);
-		push_loc (&s, r+1, c);
-		push_loc (&s, r, c-1);
-		push_loc (&s, r, c+1);
+		push_loc (&s, here.r - 1, here.c);	// 상 
+		push_loc (&s, here.r + 1, here.c);	// 하 
+		push_loc (&s, here.r, here.c - 1);	// 좌 
+		push_loc (&s, here.r, here.c + 1);	// 우  
 		
 		if (is_empty(&s))
 		{
-			printf("실패\n");
+			printf("실패\n");	// 출구가 없는 경우 실패  
 			return 0;
 		}
 		else
